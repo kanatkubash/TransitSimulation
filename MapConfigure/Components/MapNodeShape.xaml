@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="MapConfigure.Components.MapNodeShape"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MapConfigure.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" ToolTip="{Binding Node.Name}">
+  <UserControl.Resources>
+    <ContextMenu
+      x:Key="ContextMenu">
+      <MenuItem
+        Header="Удалить"
+        Command="{Binding RemoveNodeCommand}"
+        CommandParameter="{Binding Node}"/>
+      <MenuItem
+        x:Name="RoadMenu"
+        Header="Проложить дорогу"
+        Command="{Binding FindRoadCommand}" ItemsSource="{Binding Nodes}">
+        <MenuItem.ItemContainerStyle>
+          <Style TargetType="MenuItem">
+            <Setter Property="Command" Value="{Binding Command,
+              RelativeSource={RelativeSource FindAncestor,AncestorType=MenuItem}}"/>
+            <Setter Property="CommandParameter" Value="{Binding}"/>
+          </Style>
+        </MenuItem.ItemContainerStyle>
+      </MenuItem>
+    </ContextMenu>
+  </UserControl.Resources>
+  <Grid>
+    <Ellipse
+      ContextMenu="{StaticResource ContextMenu}" Width="{Binding Len}" Height="{Binding Len}"
+      Fill="White" Stroke="Black" StrokeThickness="2">
+      <Ellipse.InputBindings>
+        <MouseBinding></MouseBinding>
+      </Ellipse.InputBindings>
+    </Ellipse>
+  </Grid>
+</UserControl>

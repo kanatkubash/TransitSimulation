@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="MapConfigure.Components.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:MapConfigure.Components"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:dg="http://dragablz.net/winfx/xaml/dragablz"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="uc">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Resources.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}"/>
+      <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}"/>
+      <SolidColorBrush x:Key="PrimaryHueMidBrush">
+        <SolidColorBrush.Color>#00adc1</SolidColorBrush.Color>
+      </SolidColorBrush>
+      <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}"/>
+      <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary700}"/>
+      <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
+      <SolidColorBrush x:Key="SecondaryAccentBrush" Color="Red"/>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid Background="#88000000">
+    <dg:TabablzControl Margin="60" Background="White" FixedHeaderCount="4">
+      <dg:TabablzControl.InterTabController >
+        <dg:InterTabController />
+      </dg:TabablzControl.InterTabController>
+      <TabItem Header="Параметры" x:Name="MapSettings" DataContext="{Binding MapViewModel}">
+        <Grid Margin="10">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          <Label
+            Grid.Column="0" Style="{DynamicResource MaterialDesignLabel}"
+            Content="Выбор провайдера карты" VerticalAlignment="Top" HorizontalAlignment="Left"
+            VerticalContentAlignment="Center"/>
+          <ComboBox
+            x:Name="ComboMaptypes" Grid.Column="1"
+            Style="{DynamicResource MaterialDesignComboBoxEditableTextBox}"
+            ItemsSource="{Binding ProviderList}" DisplayMemberPath="Key" SelectedValuePath="Value"
+            SelectedValue="{Binding Provider}" VerticalAlignment="Top" HorizontalAlignment="Left"
+            MinWidth="100" Margin="0,5,0,0" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Маршруты">
+        <StackPanel Margin="10" DataContext="{Binding RouteSettingsVm}">
+          <StackPanel Orientation="Horizontal">
+            <Label Content="Группировка маршрутов"/>
+            <ComboBox
+              x:Name="GroupOptionBox" ItemsSource="{Binding GroupOptions}" Width="150"
+              SelectedValue="{Binding GroupOption}" Margin="10,0,0,0"/>
+          </StackPanel>
+          <DataGrid x:Name="RoutesTable" AutoGenerateColumns="True" Margin="0,10,0,0" ItemsSource="{Binding Items}">
+            <DataGrid.GroupStyle>
+              <GroupStyle>
+                <GroupStyle.ContainerStyle>
+                  <Style TargetType="GroupItem">
+                    <Setter Property="Template">
+                      <Setter.Value>
+                        <ControlTemplate>
+                          <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                              <Label Content="{Binding Name}"/>
+                              <Label Content="{Binding ItemCount,StringFormat=:{0} маршрутов}"/>
+                            </StackPanel>
+                            <ItemsPresenter/>
+                          </StackPanel>
+                        </ControlTemplate>
+                      </Setter.Value>
+                    </Setter>
+                  </Style>
+                </GroupStyle.ContainerStyle>
+              </GroupStyle>
+            </DataGrid.GroupStyle>
+          </DataGrid>
+        </StackPanel>
+      </TabItem>
+      <TabItem Header="Симуляция"></TabItem>
+    </dg:TabablzControl>
+    <c:CButton x:Name="SettingsOpenBtn"
+               Command="{Binding ToggleCommand}"
+      CommandParameter="{StaticResource false}"
+      HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"
+      Back="#ff0266" Kind="Close" Width="50" Height="50"/>
+  </Grid>
+</UserControl>

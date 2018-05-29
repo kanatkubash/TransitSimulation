@@ -1,0 +1,94 @@
+﻿<Window xmlns:c="clr-namespace:MapConfigure.Components"  x:Class="MapConfigure.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gmaps="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+        xmlns:gmapsCommon="clr-namespace:GMap.NET;assembly=GMap.NET.Core"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:MapConfigure"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:cv="clr-namespace:MapConfigure.Converters"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Resources.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+      <cv:LatLngToTextConverter x:Key="LatLngToText"/>
+      <gmapsCommon:PointLatLng
+      x:Key="KZCenter"
+      Lat="47.729578"
+      Lng="67.232466" />
+      <ContextMenu x:Key="MapContextMenu">
+        <MenuItem Header="adas">cc</MenuItem>
+      </ContextMenu>
+    </ResourceDictionary>
+  </Window.Resources>
+  <Grid Name="MainGrid">
+    <md:DialogHost
+      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="DialogHost">
+      <gmaps:GMapControl
+        x:Name="MapControl"
+        MapProvider="{Binding Provider}" CenterPosition="{Binding CenterPoint}"
+        MinZoom="5" MaxZoom="10" MouseWheelZoomType="MousePositionWithoutCenter"
+        CanDragMap="True" Margin="0,0,0,0">
+        <gmaps:GMapControl.InputBindings>
+          <MouseBinding
+            Gesture="LeftDoubleClick" Command="{Binding AddNodeCommand}"
+            CommandParameter="{Binding ElementName=MapControl}"/>
+        </gmaps:GMapControl.InputBindings>
+      </gmaps:GMapControl>
+      <md:DialogHost.DialogContent>
+        <StackPanel Margin="16" x:Name="S">
+          <Label
+            Style="{DynamicResource MaterialDesignLabel}">
+            Добавить город/пункт
+          </Label>
+          <!--<Label
+            Style="{DynamicResource MaterialDesignLabel}" MinWidth="20"
+            Content="{Binding ChosenPoint,Converter={StaticResource LatLngToText}}"/>-->
+          <TextBox
+            MinWidth="20" IsReadOnly="True" BorderBrush="{x:Null}" BorderThickness="0"
+            Text="{Binding ChosenPoint,Converter={StaticResource LatLngToText}}"
+            />
+          <TextBox
+            x:Name="NodeNameText"
+            Style="{DynamicResource MaterialDesignTextBox}" HorizontalAlignment="Stretch"
+            Text="{Binding ChosenNode.Name,UpdateSourceTrigger=PropertyChanged}"/>
+          <StackPanel
+            Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button
+              Style="{StaticResource MaterialDesignFlatButton}" IsDefault="True" Margin="0 8 8 0"
+              Command="{Binding ToggleModalCommand}"
+              CommandParameter="{Binding ElementName=MapControl}">
+              OK
+            </Button>
+            <Button
+              Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" Margin="0 8 8 0"
+              Command="md:DialogHost.CloseDialogCommand" CommandParameter="{StaticResource false}">
+              Отмена
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </md:DialogHost.DialogContent>
+    </md:DialogHost>
+    <c:CButton x:Name="x"
+      Command="{Binding GoToKz}"
+      CommandParameter="{Binding ElementName=MapControl}"
+      Back="#00adc1" Width="30" Height="30" Kind="CrosshairsGps"
+      HorizontalAlignment="Right" Margin="0,0,20,70" VerticalAlignment="Bottom"/>
+    <c:MainMenu
+      d:IsHidden="True"
+      x:Name="MainMenuControl"
+      Visibility="{Binding IsOpen,Converter={StaticResource BoolToVisConv}}">
+    </c:MainMenu>
+    <c:CButton x:Name="SettingsOpenBtn"
+      Command="{Binding ToggleCommand}"
+      Visibility="{Binding IsClosed,Converter={StaticResource BoolToVisConv}}"
+      CommandParameter="{StaticResource true}"
+      HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"
+      Back="#00adc1" Kind="Settings" Width="50" Height="50"/>
+  </Grid>
+</Window>

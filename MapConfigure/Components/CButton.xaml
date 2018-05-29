@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="MapConfigure.Components.CButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MapConfigure.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="50"
+             x:Name="uc"
+             >
+  <Button
+      Command="{Binding Command,ElementName=uc}"
+      CommandParameter="{Binding CommandParameter,ElementName=uc}"
+      Style="{DynamicResource MaterialDesignFloatingActionMiniAccentButton}"
+      Background="{Binding Back,ElementName=uc}"
+      md:RippleAssist.IsCentered="True" Width="Auto" Height="Auto"
+      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,-2,0,2">
+    <md:PackIcon Kind="{Binding Kind,ElementName=uc}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+    Foreground="White" Width="Auto" Height="Auto" Margin="9" />
+  </Button>
+</UserControl>
