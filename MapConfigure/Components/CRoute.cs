@@ -80,6 +80,9 @@
 
     public override void RegenerateShape(GMapControl map)
     {
+      if (Shape != null)
+        Shape.Effect = null;
+
       base.RegenerateShape(map);
       var path = (Path)Shape;
       if (path == null)
