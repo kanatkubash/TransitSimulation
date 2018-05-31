@@ -57,13 +57,28 @@ namespace MapConfigure.ViewModels
       set => Set(ref toggleModalCommand, value);
     }
     private ICommand toggleModalCommand;
-
-    //public ObservableCollection<GMapMarker> Markers
-    //{
-    //  get => markers;
-    //  set => Set(ref markers, value);
-    //}
-    //private ObservableCollection<GMapMarker> markers;
+    public ICommand ShowHiddenRoutesCommand
+    {
+      get => showHiddenRoutesCommand;
+      set => Set(ref showHiddenRoutesCommand, value);
+    }
+    private ICommand showHiddenRoutesCommand;
+    public int HiddenRoutes
+    {
+      get => hiddenRoutes;
+      set
+      {
+        Set(ref hiddenRoutes, value);
+        CanHideRoutes = hiddenRoutes != 0;
+      }
+    }
+    private int hiddenRoutes;
+    public bool CanHideRoutes
+    {
+      get => canHideRoutes;
+      set => Set(ref canHideRoutes, value);
+    }
+    private bool canHideRoutes;
 
     public MapControlViewModel(IDictionary dictionary, NodesViewModel nodesVm)
     {
@@ -75,6 +90,7 @@ namespace MapConfigure.ViewModels
          DialogHost.OpenDialogCommand.Execute(null, (IInputElement)parameter)
       );
       ToggleModalCommand = new ToggleModal(nodesVm.EditNodeFinishCommand.Execute);
+      ShowHiddenRoutesCommand = new ShowHiddenRoutes();
 
       ProviderList = new Dictionary<string, GMapProvider>()
       {

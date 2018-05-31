@@ -26,6 +26,12 @@
       set => Set(ref removeRoadCommand, value);
     }
     private ICommand removeRoadCommand;
+    public ICommand HideRoadCommand
+    {
+      get => hideRoadCommand;
+      set => Set(ref hideRoadCommand, value);
+    }
+    private ICommand hideRoadCommand;
 
     public RoadViewModel(RoadsViewModel roadsVm, Road road)
     {

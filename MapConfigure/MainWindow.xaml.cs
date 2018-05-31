@@ -20,6 +20,7 @@ namespace MapConfigure
 {
   using System.Collections;
   using System.Collections.Specialized;
+  using System.ComponentModel;
   using System.IO;
   using Components;
   using Core.Entities;
@@ -54,8 +55,17 @@ namespace MapConfigure
 
       foreach (var road in RoadsVm.Roads)
       {
-        MapControl.Markers.Add(CRoute.Make(road, RoadsVm));
+        var cRoute = CRoute.Make(road, RoadsVm);
+        cRoute.PropertyChanged += CRouteHideHandler;
+        MapControl.Markers.Add(cRoute);
       }
+    }
+
+    private void CRouteHideHandler(object sender, PropertyChangedEventArgs p)
+    {
+      var cRoute = (CRoute)sender;
+      if (p.PropertyName == "IsVisible")
+        MapVm.HiddenRoutes += !cRoute.IsVisible ? 1 : -1;
     }
 
     private void SetContexts()
