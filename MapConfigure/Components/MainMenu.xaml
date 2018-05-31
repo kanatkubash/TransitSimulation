@@ -56,7 +56,10 @@
               x:Name="GroupOptionBox" ItemsSource="{Binding GroupOptions}" Width="150"
               SelectedValue="{Binding GroupOption}" Margin="10,0,0,0"/>
           </StackPanel>
-          <DataGrid x:Name="RoutesTable" AutoGenerateColumns="True" Margin="0,10,0,0" ItemsSource="{Binding Items}">
+          <DataGrid
+            x:Name="RoutesTable" Margin="0,10,0,0" AutoGenerateColumns="False"
+            ItemsSource="{Binding Routes}" Style="{StaticResource MaterialDesignDataGrid}"
+            HorizontalGridLinesBrush="LightGray">
             <DataGrid.GroupStyle>
               <GroupStyle>
                 <GroupStyle.ContainerStyle>
@@ -78,6 +81,48 @@
                 </GroupStyle.ContainerStyle>
               </GroupStyle>
             </DataGrid.GroupStyle>
+            <DataGrid.Columns>
+              <!--<DataGridComboBoxColumn
+                Header="Откуда" ItemsSource="{Binding Nodes}"
+                DisplayMemberPath="Name" SelectedValuePath="Name"
+                SelectedValueBinding="{Binding From}" />-->
+              <DataGridComboBoxColumn
+                SelectedValuePath="Name" DisplayMemberPath="Name" Header="Куда"  SelectedValueBinding="{Binding To}">
+                <DataGridComboBoxColumn.ElementStyle>
+                  <Style TargetType="ComboBox">
+                    <Style.Triggers>
+                      <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                          <Condition Property="HasItems" Value="true"/>
+                          <Condition Property="SelectedItem" Value="{x:Null}"/>
+                        </MultiTrigger.Conditions>
+                        <MultiTrigger.Setters>
+                          <Setter Property="IsDropDownOpen" Value="True"/>
+                        </MultiTrigger.Setters>
+                      </MultiTrigger>
+                    </Style.Triggers>
+                    <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"/>
+                  </Style>
+                </DataGridComboBoxColumn.ElementStyle>
+                <DataGridComboBoxColumn.EditingElementStyle>
+                  <Style TargetType="ComboBox">
+                    <Style.Triggers>
+                      <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                          <Condition Property="HasItems" Value="true"/>
+                          <Condition Property="SelectedItem" Value="{x:Null}"/>
+                        </MultiTrigger.Conditions>
+                        <MultiTrigger.Setters>
+                          <Setter Property="IsDropDownOpen" Value="True"/>
+                        </MultiTrigger.Setters>
+                      </MultiTrigger>
+                    </Style.Triggers>
+                    <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"/>
+                  </Style>
+                </DataGridComboBoxColumn.EditingElementStyle>
+              </DataGridComboBoxColumn>
+              <DataGridTextColumn Header="Количество фур в год" Binding="{Binding PerYear}"/>
+            </DataGrid.Columns>
           </DataGrid>
         </StackPanel>
       </TabItem>

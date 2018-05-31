@@ -23,6 +23,7 @@ namespace MapConfigure
   using System.ComponentModel;
   using System.IO;
   using Components;
+  using Core.Data;
   using Core.Entities;
   using Data;
   using Newtonsoft.Json;
@@ -108,7 +109,7 @@ namespace MapConfigure
         }
       };
 
-      RoutesVm = new RoutesViewModel();
+      RoutesVm = new RoutesViewModel(new JsonRepo<TransportStats>(), NodesVm.Nodes);
       MapVm = new MapControlViewModel(this.Resources, NodesVm);
       SettingsVm = new SettingsViewModel(MapVm, RoutesVm);
       MapControl.DataContext = MapVm;
