@@ -64,5 +64,7 @@
           To = From
         };
     }
+
+    public string ComputedName => From.Name.CompareTo(To.Name) > 0 ? $"{From}-{To}" : $"{To}-{From}";
   }
 }

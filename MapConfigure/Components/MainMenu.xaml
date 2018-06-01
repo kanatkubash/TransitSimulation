@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:c="clr-namespace:MapConfigure.Components"
+             xmlns:v="clr-namespace:MapConfigure.Components.Validations"
+             xmlns:cv="clr-namespace:MapConfigure.Converters"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dg="http://dragablz.net/winfx/xaml/dragablz"
              mc:Ignorable="d" 
@@ -23,6 +25,12 @@
       <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary700}"/>
       <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
       <SolidColorBrush x:Key="SecondaryAccentBrush" Color="Red"/>
+      <Style x:Key="DgCombobox" TargetType="ComboBox">
+        <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,
+          RelativeSource={RelativeSource FindAncestor,AncestorType=DataGrid}}"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+      </Style>
     </ResourceDictionary>
   </UserControl.Resources>
   <Grid Background="#88000000">
@@ -33,8 +41,8 @@
       <TabItem Header="Параметры" x:Name="MapSettings" DataContext="{Binding MapViewModel}">
         <Grid Margin="10">
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
           </Grid.ColumnDefinitions>
           <Label
             Grid.Column="0" Style="{DynamicResource MaterialDesignLabel}"
@@ -49,84 +57,192 @@
         </Grid>
       </TabItem>
       <TabItem Header="Маршруты">
-        <StackPanel Margin="10" DataContext="{Binding RouteSettingsVm}">
-          <StackPanel Orientation="Horizontal">
+        <DockPanel Margin="10" DataContext="{Binding RouteSettingsVm}">
+          <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
             <Label Content="Группировка маршрутов"/>
             <ComboBox
               x:Name="GroupOptionBox" ItemsSource="{Binding GroupOptions}" Width="150"
               SelectedValue="{Binding GroupOption}" Margin="10,0,0,0"/>
+            <CheckBox
+              Visibility="{Binding IsReadMode,Converter={StaticResource BoolToVisConv}}"
+              Margin="10,0,0,0" VerticalContentAlignment="Center" IsChecked="{Binding IsEditMode}"
+              >
+              Изменить
+            </CheckBox>
+            <Button
+              Visibility="{Binding IsEditMode,Converter={StaticResource BoolToVisConv}}"
+              Margin="10,0,0,0" Style="{StaticResource MaterialDesignRaisedButton}"
+              Command="{Binding SaveCommand}" Height="26">
+              Сохранить
+            </Button>
+            <Button
+              Visibility="{Binding IsEditMode,Converter={StaticResource BoolToVisConv}}"
+              Style="{StaticResource MaterialDesignFlatButton}" Height="26"
+              Command="{Binding EditCommand}" CommandParameter="{StaticResource false}"
+            >Отмена</Button>
           </StackPanel>
-          <DataGrid
-            x:Name="RoutesTable" Margin="0,10,0,0" AutoGenerateColumns="False"
-            ItemsSource="{Binding Routes}" Style="{StaticResource MaterialDesignDataGrid}"
-            HorizontalGridLinesBrush="LightGray">
-            <DataGrid.GroupStyle>
-              <GroupStyle>
-                <GroupStyle.ContainerStyle>
-                  <Style TargetType="GroupItem">
-                    <Setter Property="Template">
-                      <Setter.Value>
-                        <ControlTemplate>
-                          <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                              <Label Content="{Binding Name}"/>
-                              <Label Content="{Binding ItemCount,StringFormat=:{0} маршрутов}"/>
+          <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="1*"></ColumnDefinition>
+              <ColumnDefinition Width="10"></ColumnDefinition>
+              <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <DataGrid
+            c:DataGridBehavior.DisplayRowNumber="True" HeadersVisibility="Row" Grid.Column="0"
+            SelectionMode="Extended" x:Name="RoutesTable" Margin="0,10,0,0"
+            AutoGenerateColumns="False" ItemsSource="{Binding RoutesView}"
+            Style="{StaticResource MaterialDesignDataGrid}" HorizontalGridLinesBrush="LightGray"
+            VerticalScrollBarVisibility="Auto" IsReadOnly="{Binding IsReadMode}">
+              <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                  <Setter Property="MinWidth" Value="30" />
+                  <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                      <Setter Property="Background" Value="#60ff4040" />
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </DataGrid.RowHeaderStyle>
+              <DataGrid.GroupStyle>
+                <GroupStyle>
+                  <GroupStyle.ContainerStyle>
+                    <Style TargetType="GroupItem">
+                      <Setter Property="Template">
+                        <Setter.Value>
+                          <ControlTemplate>
+                            <StackPanel>
+                              <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding Name}"/>
+                                <Label Content="{Binding ItemCount}"
+                                     ContentStringFormat="{}{0} маршрут(ов)"/>
+                              </StackPanel>
+                              <ItemsPresenter/>
                             </StackPanel>
-                            <ItemsPresenter/>
-                          </StackPanel>
-                        </ControlTemplate>
-                      </Setter.Value>
-                    </Setter>
-                  </Style>
-                </GroupStyle.ContainerStyle>
-              </GroupStyle>
-            </DataGrid.GroupStyle>
-            <DataGrid.Columns>
-              <!--<DataGridComboBoxColumn
-                Header="Откуда" ItemsSource="{Binding Nodes}"
-                DisplayMemberPath="Name" SelectedValuePath="Name"
-                SelectedValueBinding="{Binding From}" />-->
-              <DataGridComboBoxColumn
-                SelectedValuePath="Name" DisplayMemberPath="Name" Header="Куда"  SelectedValueBinding="{Binding To}">
-                <DataGridComboBoxColumn.ElementStyle>
-                  <Style TargetType="ComboBox">
-                    <Style.Triggers>
-                      <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                          <Condition Property="HasItems" Value="true"/>
-                          <Condition Property="SelectedItem" Value="{x:Null}"/>
-                        </MultiTrigger.Conditions>
-                        <MultiTrigger.Setters>
-                          <Setter Property="IsDropDownOpen" Value="True"/>
-                        </MultiTrigger.Setters>
-                      </MultiTrigger>
-                    </Style.Triggers>
-                    <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"/>
-                  </Style>
-                </DataGridComboBoxColumn.ElementStyle>
-                <DataGridComboBoxColumn.EditingElementStyle>
-                  <Style TargetType="ComboBox">
-                    <Style.Triggers>
-                      <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                          <Condition Property="HasItems" Value="true"/>
-                          <Condition Property="SelectedItem" Value="{x:Null}"/>
-                        </MultiTrigger.Conditions>
-                        <MultiTrigger.Setters>
-                          <Setter Property="IsDropDownOpen" Value="True"/>
-                        </MultiTrigger.Setters>
-                      </MultiTrigger>
-                    </Style.Triggers>
-                    <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid}}"/>
-                  </Style>
-                </DataGridComboBoxColumn.EditingElementStyle>
-              </DataGridComboBoxColumn>
-              <DataGridTextColumn Header="Количество фур в год" Binding="{Binding PerYear}"/>
-            </DataGrid.Columns>
-          </DataGrid>
-        </StackPanel>
+                          </ControlTemplate>
+                        </Setter.Value>
+                      </Setter>
+                    </Style>
+                  </GroupStyle.ContainerStyle>
+                </GroupStyle>
+              </DataGrid.GroupStyle>
+              <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                  <Style.Triggers>
+                    <DataTrigger
+                      Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
+                      <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}"/>
+                      <Setter Property="Opacity" Value="0.5"/>
+                      <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                          <Storyboard>
+                            <DoubleAnimation
+                              From="0" To="0.5"  Duration="0:0:0.5"
+                              Storyboard.TargetProperty="Opacity" />
+                          </Storyboard>
+                        </BeginStoryboard>
+                      </DataTrigger.EnterActions>
+                      <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                          <Storyboard>
+                            <DoubleAnimation
+                              From="0.5" To="0"  Duration="0:0:0.5"
+                              Storyboard.TargetProperty="Opacity" />
+                          </Storyboard>
+                        </BeginStoryboard>
+                      </DataTrigger.ExitActions>
+                    </DataTrigger>
+                    <Trigger Property="Validation.HasError" Value="True">
+                      <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},
+            Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </DataGrid.RowStyle>
+              <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DeepSkyBlue"/>
+              </DataGrid.Resources>
+              <DataGrid.Columns>
+                <DataGridComboBoxColumn
+                MinWidth="80" SelectedValuePath="Name" DisplayMemberPath="Name" Header="Откуда"
+                SelectedValueBinding="{Binding From,ValidatesOnExceptions=True}"
+                ElementStyle="{StaticResource DgCombobox}"
+                EditingElementStyle="{StaticResource DgCombobox}" Width="1*"/>
+                <DataGridComboBoxColumn
+                MinWidth="80" SelectedValuePath="Name" DisplayMemberPath="Name" Header="Куда"
+                SelectedValueBinding="{Binding To,ValidatesOnExceptions=True}"
+                ElementStyle="{StaticResource DgCombobox}" Width="1*"
+                EditingElementStyle="{StaticResource DgCombobox}" />
+                <DataGridTextColumn
+                Header="Количество фур в год"
+                Binding="{Binding PerYear,ValidatesOnExceptions=True}" Width="1*" />
+              </DataGrid.Columns>
+              <DataGrid.RowValidationRules>
+                <v:RouteFromToValidation ValidationStep="CommittedValue" />
+              </DataGrid.RowValidationRules>
+              <DataGrid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem
+                  Header="Удалить" Command="{Binding RemoveRoutesCommand}"
+                  CommandParameter="{Binding PlacementTarget.SelectedItems,
+                  RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"/>
+                  <MenuItem
+                  Header="Создать обратный маршрут" Command="{Binding AddReverseRouteCommand}"
+                  CommandParameter="{Binding PlacementTarget.SelectedItems,
+                  RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}">
+                    <MenuItem.Style>
+                      <Style TargetType="MenuItem">
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Style.Triggers>
+                          <DataTrigger
+                          Binding="{Binding CommandParameter.Count,
+                          RelativeSource={RelativeSource Self}}"
+                          Value="1">
+                            <Setter Property="IsEnabled" Value="True"/>
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </MenuItem.Style>
+                  </MenuItem>
+                </ContextMenu>
+              </DataGrid.ContextMenu>
+            </DataGrid>
+            <!--<Grid Background="Red" Grid.Column="2">
+
+            </Grid>-->
+            <ScrollViewer Grid.Column="2" >
+              <Grid >
+                <StackPanel>
+                  <Button
+                VerticalAlignment="Top" HorizontalAlignment="Left"
+                Margin="10,10,0,0" Style="{StaticResource MaterialDesignRaisedButton}"
+                Command="{Binding RouteErrorCheckCommand}" Height="26" IsEnabled="{Binding IsReadMode}">
+                    Проверить маршруты
+                  </Button>
+                  <ListBox Margin="0,10,0,0" ItemsSource="{Binding RouteErrors}">
+                    <ListBox.Style>
+                      <Style TargetType="ListBox">
+                        <Style.Triggers>
+                          <DataTrigger
+                            Binding="{Binding Items.Count,RelativeSource={RelativeSource Self}}"
+                            Value="0">
+                            <Setter Property="Template">
+                              <Setter.Value>
+                                <ControlTemplate>
+                                </ControlTemplate>
+                              </Setter.Value>
+                            </Setter>
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </ListBox.Style>
+                  </ListBox>
+                </StackPanel>
+              </Grid>
+            </ScrollViewer>
+          </Grid>
+        </DockPanel>
       </TabItem>
-      <TabItem Header="Симуляция"></TabItem>
+      <TabItem Header="Симуляция" />
     </dg:TabablzControl>
     <c:CButton x:Name="SettingsOpenBtn"
                Command="{Binding ToggleCommand}"
@@ -135,3 +251,66 @@
       Back="#ff0266" Kind="Close" Width="50" Height="50"/>
   </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

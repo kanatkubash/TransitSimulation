@@ -8,14 +8,9 @@
   /// </summary>
   public partial class MainMenu : UserControl
   {
-    //public RouteSettingsViewModel RouteSettingsVm { get; }
-
     public MainMenu()
     {
-      //RouteSettingsVm = new RouteSettingsViewModel();
-      //this.DataContext = this;
       InitializeComponent();
-
     }
   }
 }

@@ -148,6 +148,8 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RemoveNode.cs" />
     <Compile Include="Commands\RemoveRoad.cs" />
+    <Compile Include="Commands\RemoveRoute.cs" />
+    <Compile Include="Commands\RouteErrorCheck.cs" />
     <Compile Include="Commands\ShowHiddenRoutes.cs" />
     <Compile Include="Commands\ToggleModal.cs" />
     <Compile Include="Commands\ToggleSettings.cs" />
@@ -155,13 +157,16 @@
       <DependentUpon>CButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Components\CRoute.cs" />
+    <Compile Include="Components\DataGridBehavior.cs" />
     <Compile Include="Components\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Components\MapNodeShape.xaml.cs">
       <DependentUpon>MapNodeShape.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Validations\RouteFromToValidation.cs" />
     <Compile Include="Converters\LatLngToTextConverter.cs" />
+    <Compile Include="Converters\TrStatsToRouteConverter.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Data\JsonRepo.cs" />
     <Compile Include="Services\GoogleDirectionFinder.cs" />

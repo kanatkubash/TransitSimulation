@@ -109,7 +109,7 @@ namespace MapConfigure
         }
       };
 
-      RoutesVm = new RoutesViewModel(new JsonRepo<TransportStats>(), NodesVm.Nodes);
+      RoutesVm = new RoutesViewModel(new JsonRepo<TransportStats>(), NodesVm.Nodes, RoadsVm.Roads);
       MapVm = new MapControlViewModel(this.Resources, NodesVm);
       SettingsVm = new SettingsViewModel(MapVm, RoutesVm);
       MapControl.DataContext = MapVm;
