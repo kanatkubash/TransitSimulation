@@ -35,7 +35,7 @@
       this.routesVm = routesVm;
       this.roadsVm = roadsVm;
 
-      RemoveNodeCommand = new RemoveNode(nodesVm, routesVm);
+      RemoveNodeCommand = new RemoveNode(nodesVm, routesVm, roadsVm);
       FindRoadCommand = new FindRoad(Node, roadsVm);
       nodesVm.NodesChanged += (a, b) => this.OnPropertyChanged(new PropertyChangedEventArgs("Nodes"));
       Shape = new MapNodeShape(this);
