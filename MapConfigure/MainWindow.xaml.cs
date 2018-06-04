@@ -99,12 +99,17 @@ namespace MapConfigure
             foreach (Road item in b.OldItems)
             {
               var marker = MapControl.Markers.OfType<CRoute>().First(m => m.Road == item);
+              marker.PropertyChanged -= CRouteHideHandler;
               MapControl.Markers.Remove(marker);
             }
             break;
           case NotifyCollectionChangedAction.Add:
             foreach (Road item in b.NewItems)
-              MapControl.Markers.Add(CRoute.Make(item, RoadsVm));
+            {
+              var cRoute = CRoute.Make(item, RoadsVm);
+              MapControl.Markers.Add(cRoute);
+              cRoute.PropertyChanged += CRouteHideHandler;
+            }
             break;
         }
       };
