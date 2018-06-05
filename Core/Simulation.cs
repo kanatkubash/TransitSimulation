@@ -1,4 +1,6 @@
 ﻿#define DEBUG
+using System.Threading;
+
 namespace Core
 {
   using Data;
@@ -29,15 +31,17 @@ namespace Core
     protected Dictionary<string, TransportStats> TransportStatsByDirection { get; set; }
       = new Dictionary<string, TransportStats>();
     protected NumberByDaysSpreader Spreader { get; set; }
+    protected SealCountSpreader SealCountSpreader { get; set; }
 
     /// <summary>
     /// Initialize all variables
     /// </summary>
-    public Simulation()
+    public Simulation(IDataProvider<TransportStats> transportStatsProvider, IDataProvider<RoadStats> roadStatsProvider, IRandom randomer = null)
     {
-      TransportStatsProvider = new JsonDataProvider<TransportStats>();
-      RoadStatsProvider = new JsonDataProvider<RoadStats>();
-      Spreader = new NumberByDaysSpreader();
+      TransportStatsProvider = transportStatsProvider;
+      RoadStatsProvider = roadStatsProvider;
+      Spreader = new NumberByDaysSpreader(randomer);
+      SealCountSpreader = new SealCountSpreader();
       InitGatherers();
     }
 
@@ -67,17 +71,26 @@ namespace Core
 
     /// <summary>
     /// Start the simulation
+    /// <param name="avgSpeed">Speed</param>
+    /// <param name="sealPercentages">Seal count percentages</param>
+    /// <param name="token">Token to end simulation in midway</param>
     /// </summary>
-    public void Start()
+    public void Start(int avgSpeed, int[] sealPercentages, CancellationToken token)
     {
       var now = DateTime.Now;
       var truckSpreadByDirections = new Dictionary<string, int[]>();
       var trucksByDirections = new Dictionary<string, List<Truck>>();
+      var sealCountByDirections = new Dictionary<string, int[]>();
+      var sealCountPointerByDirections = new Dictionary<string, int>();
       var trucks = new List<Truck>();
       long t = 0;
+      if (token.IsCancellationRequested)
+        return;
 
       for (var mon = 1; mon <= 12; mon++)
       {
+        if (token.IsCancellationRequested)
+          return;
         Console.WriteLine($"Simulating month {mon}");
 
         var monthDays = DateTime.DaysInMonth(now.Year, mon);
@@ -86,27 +99,34 @@ namespace Core
 #endif
         foreach (var (Key, Value) in TransportStatsByDirection)
         {
+          if (token.IsCancellationRequested)
+            return;
           var truckCount = GetTruckCountForMonth(mon, Value.PerYear);
           truckSpreadByDirections[Key] = Spreader.Spread(monthDays, truckCount);
+          sealCountByDirections[Key] = SealCountSpreader.Spread(truckCount, sealPercentages);
+          sealCountPointerByDirections[Key] = 0;
         }
 #if DEBUG        
         Console.WriteLine("end randomize");
-#endif      
+#endif
         for (var day = 0; day < monthDays; day++)
         {
           foreach (var (Key, Value) in TransportStatsByDirection)
             for (var k = 0; k < truckSpreadByDirections[Key][day]; k++)
             {
               var road = RoadByFromTo[Key];
-              trucks.Add(new Truck(road, 70));
+              var sealCount = sealCountByDirections[Key][sealCountPointerByDirections[Key]++];
+              trucks.Add(new Truck(road, avgSpeed, sealCount));
             }
 
           uint dayT = 0;
           while (dayT < MS_IN_DAY)
           {
-            PreProcess(trucks);
+            if (token.IsCancellationRequested)
+              return;
+            PreProcess(trucks, t);
             trucks.ForEach(truck => truck.Run(t, DELTA_MS));
-            PostProcess(trucks);
+            PostProcess(trucks, t);
             ///remove all arrived trucks as they are non necessary
             trucks.RemoveAll(tr => tr.Arrived);
             dayT += DELTA_MS;

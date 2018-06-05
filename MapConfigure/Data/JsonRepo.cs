@@ -1,10 +1,12 @@
-﻿namespace MapConfigure.Data
+﻿using Core.Data;
+
+namespace MapConfigure.Data
 {
   using System.Collections.Generic;
   using System.IO;
   using Newtonsoft.Json;
 
-  public class JsonRepo<T> : IRepository<T>
+  public class JsonRepo<T> : IRepository<T>, IDataProvider<T>
   {
     public List<T> LoadAll() => Load();
 
@@ -26,5 +28,9 @@
         ? new List<T>()
         : JsonConvert.DeserializeObject<List<T>>(json);
     }
+
+    public List<T> GetAll() => Load();
+
+    public void SaveAll(List<T> data) => Save(data);
   }
 }

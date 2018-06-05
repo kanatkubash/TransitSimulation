@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="Data\JsonDataProvider.cs" />
     <Compile Include="Data\RoadStats.cs" />
+    <Compile Include="Data\SealStats.cs" />
     <Compile Include="Gatherers\NodeTruckStatistics.cs" />
     <Compile Include="Data\IDataProvider.cs" />
     <Compile Include="Data\TransportStats.cs" />
@@ -115,18 +116,23 @@
     <Compile Include="Entities\Road.cs" />
     <Compile Include="Entities\SimItem.cs" />
     <Compile Include="Entities\Truck.cs" />
+    <Compile Include="Gatherers\SealCountStatistics.cs" />
     <Compile Include="Gatherers\TruckCountStatistics.cs" />
     <Compile Include="Gatherers\TruckTimeStatistics.cs" />
+    <Compile Include="Helpers\EqualDistribution.cs" />
     <Compile Include="Helpers\HashMap.cs" />
     <Compile Include="Helpers\IRandom.cs" />
     <Compile Include="Helpers\KeyValuePairExtension.cs" />
+    <Compile Include="Helpers\IEnumerableForEachExtension.cs" />
     <Compile Include="Helpers\NodeByNameMaker.cs" />
     <Compile Include="Helpers\NumberByDaysSpreader.cs" />
     <Compile Include="Helpers\PseudoRandom.cs" />
     <Compile Include="Helpers\RandomOrgGetter.cs" />
+    <Compile Include="Helpers\RandomShuffleExtension.cs" />
     <Compile Include="Helpers\RangeMap.cs" />
     <Compile Include="Helpers\RoadsByDirectionMaker.cs" />
     <Compile Include="Helpers\RouteMaker.cs" />
+    <Compile Include="Helpers\SealCountSpreader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation.cs" />
     <Compile Include="Helpers\TransportStatsByNameMaker.cs" />

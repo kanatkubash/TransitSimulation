@@ -8,18 +8,32 @@
   {
     private readonly TextBox textbox;
 
-    public ControlWriter(TextBox control) => this.textbox = control;
+    public ControlWriter(TextBox control)
+    {
+      textbox = control;
+      textbox.AcceptsReturn = true;
+    }
 
     public override Encoding Encoding => Encoding.UTF8;
 
     public override void Write(string value)
     {
-      textbox?.Dispatcher.Invoke(() => textbox.Text += value);
+      textbox?.Dispatcher.Invoke(() =>
+      {
+        textbox.AppendText(value);
+        if (textbox.IsVisible)
+          textbox.ScrollToEnd();
+      });
     }
 
     public override void Write(char value)
     {
-      textbox?.Dispatcher.Invoke(() => textbox.Text += value);
+      textbox?.Dispatcher.Invoke(() =>
+      {
+        textbox.AppendText(value.ToString());
+        if (textbox.IsVisible)
+          textbox.ScrollToEnd();
+      });
     }
   }
 }

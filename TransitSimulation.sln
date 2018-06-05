@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleRunner", "ConsoleRunner\ConsoleRunner.csproj", "{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapConfigure", "MapConfigure\MapConfigure.csproj", "{79C63975-25E5-42F6-860B-16A99041A60D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTest", "CoreTest\CoreTest.csproj", "{D92B7332-B5DC-4F20-8291-E09AA9D6CF83}"
@@ -32,14 +30,6 @@ Global
 		{206FD331-232C-4E73-994E-94DA8C17B015}.Release|Any CPU.Build.0 = Release|Any CPU
 		{206FD331-232C-4E73-994E-94DA8C17B015}.Release|x86.ActiveCfg = Release|x86
 		{206FD331-232C-4E73-994E-94DA8C17B015}.Release|x86.Build.0 = Release|x86
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Debug|x86.ActiveCfg = Debug|x86
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Debug|x86.Build.0 = Debug|x86
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Release|x86.ActiveCfg = Release|x86
-		{8FEA318A-7B31-46FF-BA9D-ECD6BE5C91B5}.Release|x86.Build.0 = Release|x86
 		{79C63975-25E5-42F6-860B-16A99041A60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79C63975-25E5-42F6-860B-16A99041A60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79C63975-25E5-42F6-860B-16A99041A60D}.Debug|x86.ActiveCfg = Debug|x86

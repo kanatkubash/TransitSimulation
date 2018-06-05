@@ -1,4 +1,6 @@
-﻿namespace MapConfigure.Components
+﻿using System.Windows.Data;
+
+namespace MapConfigure.Components
 {
   using System;
   using System.Collections.Generic;
@@ -37,7 +39,7 @@
             return;
           }
 
-          ea.Row.Header = ea.Row.GetIndex() + 1;
+          ea.Row.Header = ea.Row.DataContext == CollectionView.NewItemPlaceholder ? "*" : (ea.Row.GetIndex() + 1).ToString();
         };
         dataGrid.LoadingRow += loadedRowHandler;
 

@@ -18,7 +18,7 @@
       Name = Name
     };
 
-    public string ComputedName => From.CompareTo(To) > 0 ? $"{From}-{To}" : $"{To}-{From}";
+    public string ComputedName => From?.CompareTo(To) > 0 ? $"{From}-{To}" : $"{To}-{From}";
 
     public override string ToString() => $"{From}-{To}";
   }

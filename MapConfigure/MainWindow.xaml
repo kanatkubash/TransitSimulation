@@ -96,7 +96,7 @@
     <c:MainMenu
       d:IsHidden="True"
       x:Name="MainMenuControl" Window="{x:Static local:MainWindow.This}"
-      Visibility="{Binding IsOpen,Converter={StaticResource BoolToVisConv}}">
+      Visibility="{Binding IsOpen,Converter={StaticResource BoolToVisConv}}" Margin="0">
     </c:MainMenu>
     <c:CButton x:Name="SettingsOpenBtn"
       Command="{Binding ToggleCommand}" ToolTip="Показать настройки"

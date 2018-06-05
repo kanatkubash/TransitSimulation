@@ -1,38 +1,44 @@
 ﻿<UserControl x:Class="MapConfigure.Components.MainMenu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:MapConfigure.Components"
              xmlns:v="clr-namespace:MapConfigure.Components.Validations"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cv="clr-namespace:MapConfigure.Converters"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dg="http://dragablz.net/winfx/xaml/dragablz"
-             mc:Ignorable="d" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" x:Name="uc">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="../Resources.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Green.Named.Primary.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Red.Named.Primary.xaml" />
+        <ResourceDictionary Source="../Resources.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Green.Named.Primary.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Red.Named.Primary.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}"/>
-      <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}"/>
+      <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}" />
+      <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}" />
       <SolidColorBrush x:Key="PrimaryHueMidBrush">
         <SolidColorBrush.Color>#00adc1</SolidColorBrush.Color>
       </SolidColorBrush>
-      <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}"/>
-      <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary700}"/>
-      <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
-      <SolidColorBrush x:Key="SecondaryAccentBrush" Color="White"/>
+      <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}" />
+      <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary700}" />
+      <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}" />
+      <SolidColorBrush x:Key="SecondaryAccentBrush" Color="White" />
       <Style x:Key="DgCombobox" TargetType="ComboBox">
-        <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,
-          RelativeSource={RelativeSource FindAncestor,AncestorType=DataGrid}}"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="ItemsSource"
+                Value="{Binding DataContext.Nodes,
+          RelativeSource={RelativeSource FindAncestor,AncestorType=DataGrid}}" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
       </Style>
       <SolidColorBrush x:Key="red" Color="{StaticResource RedPrimary300}" />
       <SolidColorBrush x:Key="green" Color="{StaticResource GreenPrimary300}" />
@@ -40,7 +46,7 @@
   </UserControl.Resources>
   <Grid Background="#88000000">
     <dg:TabablzControl Margin="60" Background="White" FixedHeaderCount="4">
-      <dg:TabablzControl.InterTabController >
+      <dg:TabablzControl.InterTabController>
         <dg:InterTabController />
       </dg:TabablzControl.InterTabController>
       <TabItem Header="Параметры" x:Name="MapSettings" DataContext="{Binding MapViewModel}">
@@ -52,7 +58,7 @@
           <Label
             Grid.Column="0" Style="{DynamicResource MaterialDesignLabel}"
             Content="Выбор провайдера карты" VerticalAlignment="Top" HorizontalAlignment="Left"
-            VerticalContentAlignment="Center"/>
+            VerticalContentAlignment="Center" />
           <ComboBox
             x:Name="ComboMaptypes" Grid.Column="1"
             Style="{DynamicResource MaterialDesignComboBoxEditableTextBox}"
@@ -64,14 +70,13 @@
       <TabItem Header="Маршруты">
         <DockPanel Margin="10" DataContext="{Binding RouteSettingsVm}">
           <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-            <Label Content="Группировка маршрутов"/>
+            <Label Content="Группировка маршрутов" />
             <ComboBox
               x:Name="GroupOptionBox" ItemsSource="{Binding GroupOptions}" Width="150"
-              SelectedValue="{Binding GroupOption}" Margin="10,0,0,0"/>
+              SelectedValue="{Binding GroupOption,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0" />
             <CheckBox
               Visibility="{Binding IsReadMode,Converter={StaticResource BoolToVisConv}}"
-              Margin="10,0,0,0" VerticalContentAlignment="Center" IsChecked="{Binding IsEditMode}"
-              >
+              Margin="10,0,0,0" VerticalContentAlignment="Center" IsChecked="{Binding IsEditMode}">
               Изменить
             </CheckBox>
             <Button
@@ -83,21 +88,22 @@
             <Button
               Visibility="{Binding IsEditMode,Converter={StaticResource BoolToVisConv}}"
               Style="{StaticResource MaterialDesignFlatButton}" Height="26"
-              Command="{Binding EditCommand}" CommandParameter="{StaticResource false}"
-            >Отмена</Button>
+              Command="{Binding EditCommand}" CommandParameter="{StaticResource false}">
+              Отмена
+            </Button>
           </StackPanel>
           <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="1*"></ColumnDefinition>
-              <ColumnDefinition Width="10"></ColumnDefinition>
-              <ColumnDefinition Width="1*"></ColumnDefinition>
+              <ColumnDefinition Width="1*" />
+              <ColumnDefinition Width="10" />
+              <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <DataGrid
-            c:DataGridBehavior.DisplayRowNumber="True" HeadersVisibility="Row" Grid.Column="0"
-            SelectionMode="Extended" x:Name="RoutesTable" Margin="0,10,0,0"
-            AutoGenerateColumns="False" ItemsSource="{Binding RoutesView}"
-            Style="{StaticResource MaterialDesignDataGrid}" HorizontalGridLinesBrush="LightGray"
-            VerticalScrollBarVisibility="Auto" IsReadOnly="{Binding IsReadMode}">
+              c:DataGridBehavior.DisplayRowNumber="True" HeadersVisibility="All" Grid.Column="0" ColumnWidth="*"
+              SelectionMode="Extended" x:Name="RoutesTable" Margin="0,10,0,0"
+              AutoGenerateColumns="False" ItemsSource="{Binding RoutesView}"
+              Style="{StaticResource MaterialDesignDataGrid}" HorizontalGridLinesBrush="LightGray"
+              VerticalScrollBarVisibility="Auto" IsReadOnly="{Binding IsReadMode}">
               <DataGrid.RowHeaderStyle>
                 <Style TargetType="DataGridRowHeader">
                   <Setter Property="MinWidth" Value="30" />
@@ -117,11 +123,11 @@
                           <ControlTemplate>
                             <StackPanel>
                               <StackPanel Orientation="Horizontal">
-                                <Label Content="{Binding Name}"/>
+                                <Label Content="{Binding Name}" />
                                 <Label Content="{Binding ItemCount}"
-                                     ContentStringFormat="{}{0} маршрут(ов)"/>
+                                       ContentStringFormat="{}{0} маршрут(ов)" />
                               </StackPanel>
-                              <ItemsPresenter/>
+                              <ItemsPresenter />
                             </StackPanel>
                           </ControlTemplate>
                         </Setter.Value>
@@ -135,13 +141,13 @@
                   <Style.Triggers>
                     <DataTrigger
                       Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
-                      <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}"/>
-                      <Setter Property="Opacity" Value="0.5"/>
+                      <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+                      <Setter Property="Opacity" Value="1" />
                       <DataTrigger.EnterActions>
                         <BeginStoryboard>
                           <Storyboard>
                             <DoubleAnimation
-                              From="0" To="0.5"  Duration="0:0:0.5"
+                              From="0" To="1" Duration="0:0:0.5"
                               Storyboard.TargetProperty="Opacity" />
                           </Storyboard>
                         </BeginStoryboard>
@@ -150,36 +156,37 @@
                         <BeginStoryboard>
                           <Storyboard>
                             <DoubleAnimation
-                              From="0.5" To="0"  Duration="0:0:0.5"
+                              From="1" To="0" Duration="0:0:0.5"
                               Storyboard.TargetProperty="Opacity" />
                           </Storyboard>
                         </BeginStoryboard>
                       </DataTrigger.ExitActions>
                     </DataTrigger>
                     <Trigger Property="Validation.HasError" Value="True">
-                      <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},
-            Path=(Validation.Errors)[0].ErrorContent}"/>
+                      <Setter Property="ToolTip"
+                              Value="{Binding RelativeSource={RelativeSource Self},
+            Path=(Validation.Errors)[0].ErrorContent}" />
                     </Trigger>
                   </Style.Triggers>
                 </Style>
               </DataGrid.RowStyle>
               <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DeepSkyBlue"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DeepSkyBlue" />
               </DataGrid.Resources>
               <DataGrid.Columns>
                 <DataGridComboBoxColumn
-                MinWidth="80" SelectedValuePath="Name" DisplayMemberPath="Name" Header="Откуда"
-                SelectedValueBinding="{Binding From,ValidatesOnExceptions=True}"
-                ElementStyle="{StaticResource DgCombobox}"
-                EditingElementStyle="{StaticResource DgCombobox}" Width="1*"/>
+                  SelectedValuePath="Name" DisplayMemberPath="Name" Header="Откуда"
+                  SelectedValueBinding="{Binding From,ValidatesOnExceptions=True}"
+                  ElementStyle="{StaticResource DgCombobox}"
+                  EditingElementStyle="{StaticResource DgCombobox}" />
                 <DataGridComboBoxColumn
-                MinWidth="80" SelectedValuePath="Name" DisplayMemberPath="Name" Header="Куда"
-                SelectedValueBinding="{Binding To,ValidatesOnExceptions=True}"
-                ElementStyle="{StaticResource DgCombobox}" Width="1*"
-                EditingElementStyle="{StaticResource DgCombobox}" />
+                  SelectedValuePath="Name" DisplayMemberPath="Name" Header="Куда"
+                  SelectedValueBinding="{Binding To,ValidatesOnExceptions=True}"
+                  ElementStyle="{StaticResource DgCombobox}"
+                  EditingElementStyle="{StaticResource DgCombobox}" />
                 <DataGridTextColumn
-                Header="Количество фур в год"
-                Binding="{Binding PerYear,ValidatesOnExceptions=True}" Width="1*" />
+                  Header="Количество фур в год"
+                  Binding="{Binding PerYear,ValidatesOnExceptions=True}" />
               </DataGrid.Columns>
               <DataGrid.RowValidationRules>
                 <v:RouteFromToValidation ValidationStep="CommittedValue" />
@@ -187,22 +194,22 @@
               <DataGrid.ContextMenu>
                 <ContextMenu>
                   <MenuItem
-                  Header="Удалить" Command="{Binding RemoveRoutesCommand}"
-                  CommandParameter="{Binding PlacementTarget.SelectedItems,
-                  RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}"/>
+                    Header="Удалить" Command="{Binding RemoveRoutesCommand}"
+                    CommandParameter="{Binding PlacementTarget.SelectedItems,
+                  RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}" />
                   <MenuItem
-                  Header="Создать обратный маршрут" Command="{Binding AddReverseRouteCommand}"
-                  CommandParameter="{Binding PlacementTarget.SelectedItems,
+                    Header="Создать обратный маршрут" Command="{Binding AddReverseRouteCommand}"
+                    CommandParameter="{Binding PlacementTarget.SelectedItems,
                   RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}}">
                     <MenuItem.Style>
                       <Style TargetType="MenuItem">
-                        <Setter Property="IsEnabled" Value="False"/>
+                        <Setter Property="IsEnabled" Value="False" />
                         <Style.Triggers>
                           <DataTrigger
-                          Binding="{Binding CommandParameter.Count,
+                            Binding="{Binding CommandParameter.Count,
                           RelativeSource={RelativeSource Self}}"
-                          Value="1">
-                            <Setter Property="IsEnabled" Value="True"/>
+                            Value="1">
+                            <Setter Property="IsEnabled" Value="True" />
                           </DataTrigger>
                         </Style.Triggers>
                       </Style>
@@ -214,13 +221,13 @@
             <!--<Grid Background="Red" Grid.Column="2">
 
             </Grid>-->
-            <ScrollViewer Grid.Column="2" >
-              <Grid >
+            <ScrollViewer Grid.Column="2">
+              <Grid>
                 <StackPanel>
                   <Button
-                VerticalAlignment="Top" HorizontalAlignment="Left"
-                Margin="10,10,0,0" Style="{StaticResource MaterialDesignRaisedButton}"
-                Command="{Binding RouteErrorCheckCommand}" Height="26" IsEnabled="{Binding IsReadMode}">
+                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                    Margin="10,10,0,0" Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding RouteErrorCheckCommand}" Height="26" IsEnabled="{Binding IsReadMode}">
                     Проверить маршруты
                   </Button>
                   <ListBox Margin="0,10,0,0" ItemsSource="{Binding RouteErrors}">
@@ -232,8 +239,7 @@
                             Value="0">
                             <Setter Property="Template">
                               <Setter.Value>
-                                <ControlTemplate>
-                                </ControlTemplate>
+                                <ControlTemplate />
                               </Setter.Value>
                             </Setter>
                           </DataTrigger>
@@ -250,55 +256,61 @@
       <TabItem Header="Симуляция" DataContext="{Binding SimulationVm}">
         <Grid>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
           </Grid.ColumnDefinitions>
           <StackPanel Margin="10,10,0,0">
             <StackPanel.Style>
               <Style TargetType="StackPanel">
                 <Style.Triggers>
                   <DataTrigger Binding="{Binding IsEnabled,Converter={StaticResource Invertor}}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
+                    <Setter Property="IsEnabled" Value="False" />
                   </DataTrigger>
                   <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
+                    <Setter Property="IsEnabled" Value="False" />
                   </DataTrigger>
                 </Style.Triggers>
               </Style>
             </StackPanel.Style>
             <StackPanel Orientation="Horizontal">
-              <Label Content="Средняя скорость транспорта" VerticalAlignment="Top"/>
+              <Label Content="Средняя скорость транспорта" VerticalAlignment="Top" />
               <xctk:IntegerUpDown
-              VerticalAlignment="Top" Height="28" Maximum="150" Minimum="20" Increment="5"/>
+                VerticalAlignment="Top" Height="28" Maximum="150" Minimum="20" Increment="5"
+                Value="{Binding AvgSpeed}" />
             </StackPanel>
-            <Label Content="Распределение пломб по машинам" VerticalAlignment="Top"/>
+            <StackPanel Orientation="Horizontal">
+              <Label Content="Равномерное распределение по месяцам" VerticalAlignment="Top" />
+              <CheckBox
+                VerticalAlignment="Top" Height="28" IsChecked="{Binding IsEquidistribute}"/>
+            </StackPanel>
+            <Label Content="Распределение пломб по машинам" VerticalAlignment="Top" />
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-              <Label Content="1 пломба" VerticalAlignment="Top"/>
+              <Label Content="1 пломба" VerticalAlignment="Top" />
               <Slider
                 x:Name="Sl1" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
-                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[1]}"/>
-              <Label Content="{Binding Value,ElementName=Sl1}" ContentStringFormat="{}{0} %"/>
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[1]}" />
+              <Label Content="{Binding Value,ElementName=Sl1}" ContentStringFormat="{}{0} %" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-              <Label Content="2 пломбы" VerticalAlignment="Top"/>
+              <Label Content="2 пломбы" VerticalAlignment="Top" />
               <Slider
                 x:Name="Sl2" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
-                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[2]}"/>
-              <Label Content="{Binding Value,ElementName=Sl2}" ContentStringFormat="{}{0} %"/>
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[2]}" />
+              <Label Content="{Binding Value,ElementName=Sl2}" ContentStringFormat="{}{0} %" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-              <Label Content="3 пломбы" VerticalAlignment="Top"/>
+              <Label Content="3 пломбы" VerticalAlignment="Top" />
               <Slider
                 x:Name="Sl3" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
-                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[3]}"/>
-              <Label Content="{Binding Value,ElementName=Sl3}" ContentStringFormat="{}{0} %"/>
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[3]}" />
+              <Label Content="{Binding Value,ElementName=Sl3}" ContentStringFormat="{}{0} %" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-              <Label Content="4 пломбы" VerticalAlignment="Top"/>
+              <Label Content="4 пломбы" VerticalAlignment="Top" />
               <Slider
                 x:Name="Sl4" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
-                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[4]}"/>
-              <Label Content="{Binding Value,ElementName=Sl4}" ContentStringFormat="{}{0} %"/>
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[4]}" />
+              <Label Content="{Binding Value,ElementName=Sl4}" ContentStringFormat="{}{0} %" />
             </StackPanel>
           </StackPanel>
           <c:CButton
@@ -308,30 +320,101 @@
             Width="50" Height="50">
             <c:CButton.Style>
               <Style TargetType="c:CButton">
-                <Setter Property="Back" Value="{StaticResource green}"/>
+                <Setter Property="Back" Value="{StaticResource green}" />
                 <Style.Triggers>
-                  <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                    <Setter Property="Kind" Value="Stop"/>
-                    <Setter Property="Back" Value="{StaticResource red}"/>
+                  <DataTrigger Binding="{Binding IsRunning,Mode=TwoWay}" Value="True">
+                    <Setter Property="Kind" Value="Stop" />
+                    <Setter Property="Back" Value="{StaticResource red}" />
                   </DataTrigger>
-                  <DataTrigger Binding="{Binding IsRunning}" Value="False">
-                    <Setter Property="Kind" Value="Play"/>
-                    <Setter Property="Back" Value="{StaticResource green}"/>
+                  <DataTrigger Binding="{Binding IsRunning,Mode=TwoWay}" Value="False">
+                    <Setter Property="Kind" Value="Play" />
+                    <Setter Property="Back" Value="{StaticResource green}" />
                   </DataTrigger>
                 </Style.Triggers>
               </Style>
             </c:CButton.Style>
           </c:CButton>
-          <TextBox
-            Grid.Column="1" Foreground="White" IsReadOnly="True" Background="Black"
-            x:Name="StdOutTextBox"/>
+          <Grid Grid.Column="1" Margin="10">
+            <TabControl>
+              <TabItem Header="Результаты">
+                <Grid>
+                  <ScrollViewer>
+                    <StackPanel>
+                      <Label DockPanel.Dock="Top" Content="Макс. количество одновременно регистрированных ТС"
+                             FontWeight="Bold" />
+                      <Label DockPanel.Dock="Top" Content="{Binding MaxTruckCount}"
+                             ContentStringFormat="{}{0} транспортных средств" />
+                      <Expander IsExpanded="True" Header="График количества ТС">
+                        <lvc:CartesianChart Height="300">
+                          <lvc:CartesianChart.Series>
+                            <lvc:LineSeries  Values="{Binding TruckCounts}" />
+                          </lvc:CartesianChart.Series>
+                        </lvc:CartesianChart>
+                      </Expander>
+                      <Label DockPanel.Dock="Top" Content="Минимально требуемое количество пломб" FontWeight="Bold" />
+                      <DataGrid
+                        DockPanel.Dock="Top" IsReadOnly="True" Style="{StaticResource MaterialDesignDataGrid}"
+                        HorizontalGridLinesBrush="LightGray" SelectedItem="{Binding Selected}"
+                        VerticalScrollBarVisibility="Auto" ItemsSource="{Binding SealStats}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                          <DataGridTextColumn Width="1*" Binding="{Binding Node}" />
+                          <DataGridTextColumn Width="1*" Binding="{Binding Minimum}" />
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                          <ContextMenu>
+                            <MenuItem Header="Построить график">
+                              <MenuItem.Style>
+                                <Style TargetType="MenuItem">
+                                  <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Selected}" Value="{x:Null}">
+                                      <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                  </Style.Triggers>
+                                </Style>
+                              </MenuItem.Style>
+                              <MenuItem Header="Склад" Command="{Binding PlotChartCommand}" CommandParameter="0"/>
+                              <MenuItem Header="Спрос" Command="{Binding PlotChartCommand}" CommandParameter="1"/>
+                              <MenuItem Header="Прибывшие пломбы" Command="{Binding PlotChartCommand}" CommandParameter="2"/>
+                              <MenuItem Header="Количество для удовлетворения спроса" Command="{Binding PlotChartCommand}" CommandParameter="3"/>
+                            </MenuItem>
+                          </ContextMenu>
+                        </DataGrid.ContextMenu>
+                      </DataGrid>
+                      <Expander IsExpanded="True" Header="График количества пломб выбранного узла">
+                        <lvc:CartesianChart Height="300">
+                          <lvc:CartesianChart.Series>
+                            <!--<lvc:LineSeries Values="{Binding SealStatsStock}" Stroke="Orange"  Title="Stock" />-->
+                            <!--<lvc:LineSeries Values="{Binding SealStatsInquiry}" Stroke="Green"   Title="Inquiry" />-->
+                            <!--<lvc:LineSeries Values="{Binding SealStatsReuse}" Stroke="Green"   Title="Reuse" />-->
+                            <lvc:LineSeries Values="{Binding SealStatsIncr}" Stroke="Green"   Title="Данные" />
+                          </lvc:CartesianChart.Series>
+                        </lvc:CartesianChart>
+                      </Expander>
+                    </StackPanel>
+                  </ScrollViewer>
+                </Grid>
+              </TabItem>
+              <TabItem Header="Вывод">
+                <Grid>
+                  <TextBox Foreground="White" IsReadOnly="True" Background="Black"
+                           x:Name="StdOutTextBox" VerticalScrollBarVisibility="Auto">
+                    <TextBox.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="Очистить" Click="MenuItem_OnClick" />
+                      </ContextMenu>
+                    </TextBox.ContextMenu>
+                  </TextBox>
+                </Grid>
+              </TabItem>
+            </TabControl>
+          </Grid>
         </Grid>
       </TabItem>
     </dg:TabablzControl>
     <c:CButton x:Name="SettingsOpenBtn"
                Command="{Binding ToggleCommand}"
-      CommandParameter="{StaticResource false}"
-      HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"
-      Back="#ff0266" Kind="Close" Width="50" Height="50"/>
+               CommandParameter="{StaticResource false}"
+               HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"
+               Back="#ff0266" Kind="Close" Width="50" Height="50" />
   </Grid>
 </UserControl>

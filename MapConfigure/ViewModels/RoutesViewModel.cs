@@ -1,4 +1,7 @@
-﻿namespace MapConfigure.ViewModels
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace MapConfigure.ViewModels
 {
   using System.Collections;
   using System.Collections.Generic;
@@ -29,8 +32,21 @@
       get => groupOption;
       set
       {
-        Set(ref groupOption, value);
-        Regroup(value);
+        if (IsRealEdit)
+        {
+          MessageBox.Show("Нельзя группировать во время изменения");
+          Task.Run(() =>
+            {
+              Thread.Sleep(10);
+              PropertyChange(this, new PropertyChangedEventArgs("GroupOption"));
+            }
+          ).ContinueWith((t) => t.Dispose());
+        }
+        else
+        {
+          Set(ref groupOption, value);
+          Regroup(value);
+        }
       }
     }
     private string groupOption = GROUP_NONE;
@@ -41,6 +57,8 @@
       {
         IsReadMode = !value;
         Set(ref isEditMode, value);
+        if (value && Routes.Count == 0)
+          Routes.Clear();
       }
     }
     private bool isEditMode;
@@ -65,7 +83,12 @@
     private ObservableCollection<Node> nodes;
     private IList<Road> roads;
     public ListCollectionView RoutesView
-      => (ListCollectionView)CollectionViewSource.GetDefaultView(Routes);
+    {
+      get => routesView;
+      set => Set(ref routesView, value);
+    }
+
+    private ListCollectionView routesView;// { get; set; }
     public ICommand RemoveRoutesCommand
     {
       get => removeRoutesCommand;
@@ -121,6 +144,8 @@
       this.roads = roads;
       RouteErrors = new ObservableCollection<string>();
       Routes = new ObservableCollection<TransportStats>();
+      RoutesView = (ListCollectionView)CollectionViewSource.GetDefaultView(Routes);
+      RoutesView.Refresh();
       repository.LoadAll().ForEach(ts => Routes.Add(ts));
       Routes.CollectionChanged += (a, b) =>
       {

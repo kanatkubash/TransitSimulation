@@ -9,15 +9,6 @@
   /// </summary>
   public partial class MainMenu : UserControl
   {
-    //public static readonly DependencyProperty WindowProperty = DependencyProperty.Register(
-    //  "Window", typeof(MainWindow), typeof(MainMenu), new PropertyMetadata(default(MainWindow)));
-
-    //public MainWindow Window
-    //{
-    //  get => (MainWindow)GetValue(WindowProperty);
-    //  set => SetValue(WindowProperty, value);
-    //}
-
     public MainWindow Window
     {
       get => window;
@@ -32,6 +23,11 @@
     public MainMenu()
     {
       InitializeComponent();
+    }
+
+    private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+    {
+      StdOutTextBox.Clear();
     }
   }
 }

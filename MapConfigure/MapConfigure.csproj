@@ -77,6 +77,12 @@
     <Reference Include="GMap.NET.WindowsPresentation, Version=1.8.5.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
       <HintPath>..\packages\GMap.NET.Windows.1.8.5\lib\net40\GMap.NET.WindowsPresentation.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -188,9 +194,10 @@
     <Compile Include="Converters\TrStatsToRouteConverter.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Data\JsonRepo.cs" />
+    <Compile Include="Data\MemoryRepo.cs" />
     <Compile Include="Helpers\ControlWriter.cs" />
+    <Compile Include="Helpers\RoadStatsMemoryRepoMaker.cs" />
     <Compile Include="Services\GoogleDirectionFinder.cs" />
-    <Compile Include="Services\IEnumerableForEachExtension.cs" />
     <Compile Include="Services\PointLatLngParseExtension.cs" />
     <Compile Include="ViewModels\ColorViewModel.cs" />
     <Compile Include="ViewModels\MapNodeVm.cs" />

@@ -12,6 +12,10 @@
     /// </summary>
     public Road Road { get; }
     public int AvgSpeed { get; }
+    /// <summary>
+    /// Seals (plombas)
+    /// </summary>
+    public int Seals { get; }
     public double RoadPercentage => DrivenKms / Road.Length * 100d;
     /// <summary>
     /// Kms already driven
@@ -31,7 +35,7 @@
     /// </summary>
     public double PassedSeconds { get; private set; } = 0;
 
-    public Truck(Road road, int speed) : base() => (Road, AvgSpeed) = (road, speed);
+    public Truck(Road road, int speed, int seals) : base() => (Road, AvgSpeed, Seals) = (road, speed, seals);
 
     public void Run(long t, long dtMs)
     {

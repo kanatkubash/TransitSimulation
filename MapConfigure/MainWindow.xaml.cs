@@ -131,7 +131,7 @@ namespace MapConfigure
 
       RoutesVm = new RoutesViewModel(new JsonRepo<TransportStats>(), NodesVm.Nodes, RoadsVm.Roads);
       MapVm = new MapControlViewModel(this.Resources, NodesVm);
-      SimulationVm = new SimulationViewModel();
+      SimulationVm = new SimulationViewModel(Dispatcher);
       SettingsVm = new SettingsViewModel(MapVm, RoutesVm, SimulationVm);
       MapControl.DataContext = MapVm;
       SettingsOpenBtn.DataContext = SettingsVm;
