@@ -25,12 +25,15 @@ namespace MapConfigure.ViewModels
     public ICommand ToggleCommand { get; }
     public MapControlViewModel MapViewModel { get; }
     public RoutesViewModel RouteSettingsVm { get; }
+    public SimulationViewModel SimulationVm { get; }
 
-    public SettingsViewModel(MapControlViewModel mapVm, RoutesViewModel routeSettingsVm)
+    public SettingsViewModel(MapControlViewModel mapVm, RoutesViewModel routeSettingsVm,
+      SimulationViewModel simulationVm)
     {
-      this.MapViewModel = mapVm;
-      this.RouteSettingsVm = routeSettingsVm;
-      this.ToggleCommand = new ToggleSettings(this);
+      MapViewModel = mapVm;
+      RouteSettingsVm = routeSettingsVm;
+      ToggleCommand = new ToggleSettings(this);
+      SimulationVm = simulationVm;
     }
   }
 }

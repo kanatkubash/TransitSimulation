@@ -10,12 +10,13 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:cv="clr-namespace:MapConfigure.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" x:Name="Window">
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Resources.xaml"/>
       </ResourceDictionary.MergedDictionaries>
+      <SolidColorBrush x:Key="SecondaryAccentBrush" Color="White"/>
       <cv:LatLngToTextConverter x:Key="LatLngToText"/>
       <gmapsCommon:PointLatLng
       x:Key="KZCenter"
@@ -94,7 +95,7 @@
       Visibility="{Binding CanHideRoutes,Converter={StaticResource BoolToVisConv}}"/>
     <c:MainMenu
       d:IsHidden="True"
-      x:Name="MainMenuControl"
+      x:Name="MainMenuControl" Window="{x:Static local:MainWindow.This}"
       Visibility="{Binding IsOpen,Converter={StaticResource BoolToVisConv}}">
     </c:MainMenu>
     <c:CButton x:Name="SettingsOpenBtn"

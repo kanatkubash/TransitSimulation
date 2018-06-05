@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:c="clr-namespace:MapConfigure.Components"
              xmlns:v="clr-namespace:MapConfigure.Components.Validations"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cv="clr-namespace:MapConfigure.Converters"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dg="http://dragablz.net/winfx/xaml/dragablz"
@@ -15,6 +16,8 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Resources.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Green.Named.Primary.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Red.Named.Primary.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}"/>
       <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}"/>
@@ -24,13 +27,15 @@
       <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}"/>
       <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary700}"/>
       <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
-      <SolidColorBrush x:Key="SecondaryAccentBrush" Color="Red"/>
+      <SolidColorBrush x:Key="SecondaryAccentBrush" Color="White"/>
       <Style x:Key="DgCombobox" TargetType="ComboBox">
         <Setter Property="ItemsSource" Value="{Binding DataContext.Nodes,
           RelativeSource={RelativeSource FindAncestor,AncestorType=DataGrid}}"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
       </Style>
+      <SolidColorBrush x:Key="red" Color="{StaticResource RedPrimary300}" />
+      <SolidColorBrush x:Key="green" Color="{StaticResource GreenPrimary300}" />
     </ResourceDictionary>
   </UserControl.Resources>
   <Grid Background="#88000000">
@@ -242,7 +247,86 @@
           </Grid>
         </DockPanel>
       </TabItem>
-      <TabItem Header="Симуляция" />
+      <TabItem Header="Симуляция" DataContext="{Binding SimulationVm}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          <StackPanel Margin="10,10,0,0">
+            <StackPanel.Style>
+              <Style TargetType="StackPanel">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsEnabled,Converter={StaticResource Invertor}}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"></Setter>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"></Setter>
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </StackPanel.Style>
+            <StackPanel Orientation="Horizontal">
+              <Label Content="Средняя скорость транспорта" VerticalAlignment="Top"/>
+              <xctk:IntegerUpDown
+              VerticalAlignment="Top" Height="28" Maximum="150" Minimum="20" Increment="5"/>
+            </StackPanel>
+            <Label Content="Распределение пломб по машинам" VerticalAlignment="Top"/>
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+              <Label Content="1 пломба" VerticalAlignment="Top"/>
+              <Slider
+                x:Name="Sl1" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[1]}"/>
+              <Label Content="{Binding Value,ElementName=Sl1}" ContentStringFormat="{}{0} %"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+              <Label Content="2 пломбы" VerticalAlignment="Top"/>
+              <Slider
+                x:Name="Sl2" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[2]}"/>
+              <Label Content="{Binding Value,ElementName=Sl2}" ContentStringFormat="{}{0} %"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+              <Label Content="3 пломбы" VerticalAlignment="Top"/>
+              <Slider
+                x:Name="Sl3" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[3]}"/>
+              <Label Content="{Binding Value,ElementName=Sl3}" ContentStringFormat="{}{0} %"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+              <Label Content="4 пломбы" VerticalAlignment="Top"/>
+              <Slider
+                x:Name="Sl4" Minimum="0" Maximum="100" Width="152" SmallChange="1" LargeChange="5"
+                IsSnapToTickEnabled="True" Value="{Binding SealCountsPercentage[4]}"/>
+              <Label Content="{Binding Value,ElementName=Sl4}" ContentStringFormat="{}{0} %"/>
+            </StackPanel>
+          </StackPanel>
+          <c:CButton
+            x:Name="SimulationControlBtn" IsEnabled="{Binding IsEnabled}"
+            Command="{Binding SimulationToggleCommand}"
+            HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"
+            Width="50" Height="50">
+            <c:CButton.Style>
+              <Style TargetType="c:CButton">
+                <Setter Property="Back" Value="{StaticResource green}"/>
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                    <Setter Property="Kind" Value="Stop"/>
+                    <Setter Property="Back" Value="{StaticResource red}"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding IsRunning}" Value="False">
+                    <Setter Property="Kind" Value="Play"/>
+                    <Setter Property="Back" Value="{StaticResource green}"/>
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </c:CButton.Style>
+          </c:CButton>
+          <TextBox
+            Grid.Column="1" Foreground="White" IsReadOnly="True" Background="Black"
+            x:Name="StdOutTextBox"/>
+        </Grid>
+      </TabItem>
     </dg:TabablzControl>
     <c:CButton x:Name="SettingsOpenBtn"
                Command="{Binding ToggleCommand}"
@@ -251,66 +335,3 @@
       Back="#ff0266" Kind="Close" Width="50" Height="50"/>
   </Grid>
 </UserControl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

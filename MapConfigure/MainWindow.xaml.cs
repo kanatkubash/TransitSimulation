@@ -22,10 +22,12 @@ namespace MapConfigure
   using System.Collections.Specialized;
   using System.ComponentModel;
   using System.IO;
+  using System.Timers;
   using Components;
   using Core.Data;
   using Core.Entities;
   using Data;
+  using Helpers;
   using Newtonsoft.Json;
   using Path = System.Windows.Shapes.Path;
 
@@ -39,6 +41,19 @@ namespace MapConfigure
     private MapControlViewModel MapVm;
     private SettingsViewModel SettingsVm;
     private RoutesViewModel RoutesVm;
+    public SimulationViewModel SimulationVm;
+    public static MainWindow This;
+
+    public TextBox StdOutTextBox
+    {
+      get => stdOutTextBox;
+      set
+      {
+        stdOutTextBox = value;
+        Console.SetOut(new ControlWriter(StdOutTextBox));
+      }
+    }
+    private TextBox stdOutTextBox;
 
     private void InitMapControl()
     {
@@ -116,7 +131,8 @@ namespace MapConfigure
 
       RoutesVm = new RoutesViewModel(new JsonRepo<TransportStats>(), NodesVm.Nodes, RoadsVm.Roads);
       MapVm = new MapControlViewModel(this.Resources, NodesVm);
-      SettingsVm = new SettingsViewModel(MapVm, RoutesVm);
+      SimulationVm = new SimulationViewModel();
+      SettingsVm = new SettingsViewModel(MapVm, RoutesVm, SimulationVm);
       MapControl.DataContext = MapVm;
       SettingsOpenBtn.DataContext = SettingsVm;
       MainMenuControl.DataContext = SettingsVm;
@@ -126,10 +142,12 @@ namespace MapConfigure
 
     public MainWindow()
     {
+      This = this;
       InitializeComponent();
       SetContexts();
       InitMapControl();
       return;
+
       GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache;
       var x = new GMap.NET.WindowsPresentation.GMapControl();
       x.MapProvider = GMap.NET.MapProviders.YandexMapProvider.Instance;
@@ -159,8 +177,8 @@ namespace MapConfigure
         //5
         //).Points);
         var ax = (GMap.NET.MapProviders.GoogleMapProvider.Instance as GMap.NET.MapProviders.GoogleMapProvider).GetDirections(out GDirections ca,
-        new GMap.NET.PointLatLng(44.212955, 80.400367),
-        new GMap.NET.PointLatLng(51.230645, 51.366255), false, false, false, false, false);
+      new GMap.NET.PointLatLng(44.212955, 80.400367),
+      new GMap.NET.PointLatLng(51.230645, 51.366255), false, false, false, false, false);
         var ss = new GMapRoute(ca.Route);
         x.Markers.Add(ss);
         (ss.Shape as Path).Stroke = new SolidColorBrush(Colors.MediumVioletRed);
@@ -169,7 +187,10 @@ namespace MapConfigure
         {
           var q = new byte[3];
           r.NextBytes(q);
-          x.Markers.Add(new GMapMarker(new PointLatLng(r.NextDouble() * 180, r.NextDouble() * 180)) { Shape = new Ellipse() { Width = r.Next(2, 5), Height = r.Next(3, 6), Fill = new SolidColorBrush(Color.FromArgb(255, q[0], q[1], q[2])) } });
+          x.Markers.Add(new GMapMarker(new PointLatLng(r.NextDouble() * 180, r.NextDouble() * 180))
+          {
+            Shape = new Ellipse() { Width = r.Next(2, 5), Height = r.Next(3, 6), Fill = new SolidColorBrush(Color.FromArgb(255, q[0], q[1], q[2])) }
+          });
         }
         //x.Markers.Last().Shape = new Path()
         //{

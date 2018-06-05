@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MapConfigure"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:dg="http://dragablz.net/winfx/xaml/dragablz" >
+                    xmlns:dg="http://dragablz.net/winfx/xaml/dragablz"
+                    xmlns:converters="clr-namespace:MapConfigure.Converters">
 
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -16,4 +17,5 @@
   <system:Boolean x:Key="false">False</system:Boolean>
   <Style TargetType="{x:Type dg:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
   <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
+  <converters:Invertor x:Key="Invertor"/>
 </ResourceDictionary>

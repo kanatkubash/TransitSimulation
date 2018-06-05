@@ -18,5 +18,8 @@
 
       return newVal;
     }
+
+    public virtual void PropertyChange(object sender, PropertyChangedEventArgs p)
+      => PropertyChanged?.Invoke(sender, p);
   }
 }

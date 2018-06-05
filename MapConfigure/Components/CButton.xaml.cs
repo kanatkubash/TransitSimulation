@@ -39,13 +39,13 @@ namespace MapConfigure.Components
     public static readonly DependencyProperty CommandParameterProperty =
       DependencyProperty.Register("CommandParameter", typeof(object), typeof(CButton));
     public static readonly DependencyProperty BackProperty =
-      DependencyProperty.Register("Back", typeof(Brush), typeof(CButton));
+      DependencyProperty.Register("Back", typeof(SolidColorBrush), typeof(CButton));
     public static readonly DependencyProperty KindProperty =
       DependencyProperty.Register("Kind", typeof(PackIconKind), typeof(CButton));
 
-    public Brush Back
+    public SolidColorBrush Back
     {
-      get => (Brush)GetValue(BackProperty);
+      get => (SolidColorBrush)GetValue(BackProperty);
       set => SetValue(BackProperty, value);
     }
     public PackIconKind Kind
